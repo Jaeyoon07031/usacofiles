@@ -5,9 +5,6 @@ int n, in[101], out[101];
 
 int main()
 {
-	freopen("factory.in", "r", stdin);
-    freopen("factory.out", "w", stdout);
-
 	scanf("%d", &n);
 
 	for (int i = 0; i < (n - 1); i++)

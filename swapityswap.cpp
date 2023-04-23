@@ -1,60 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, a1, a2, b1, b2;
+int n, a1, a2, b1, b2, period;
 long long k;
-vector<int> path[105];
+int ipt[105], mdf[105];
 
 int main()
 {
     scanf("%d %lld\n%d %d\n%d %d", &n, &k, &a1, &a2, &b1, &b2);
-
-    for (int i = 0; i < n; i++)
+    for (int i = 1; i < n + 1; i++)
     {
-        int currentPos = i;
-        while(true)
+        ipt[i] = i;
+        mdf[i] = i;
+    }
+
+    while(true)
+    {
+        reverse(mdf + a1, mdf + a2 + 1);
+        reverse(mdf + b1, mdf + b2 + 1);
+
+        period++;
+        bool same = true;
+        
+        for (int i = 1; i < n + 1; i++)
         {
-            if (currentPos >= a1 && currentPos <= a2)
+            if (ipt[i] != mdf[i])
             {
-                if ((currentPos - a1) < (a2 - currentPos))
-                {
-                    currentPos = a2 - (currentPos - a1);
-                }
-                else if ((currentPos - a1) > (a2 - currentPos))
-                {
-                    currentPos = a1 - (currentPos - a2);
-                }
-            }
-            if (currentPos >= b1 && currentPos <= b2)
-            {
-                if ((currentPos - b1) < (b2 - currentPos))
-                {
-                    currentPos = b2 - (currentPos - b1);
-                }
-                else if ((currentPos - b1) > (b2 - currentPos))
-                {
-                    currentPos = b1 - (currentPos - b2);
-                }
-            }
-
-            path[i].push_back(currentPos);
-
-            if (currentPos == i)
-            {
+                same = false;
                 break;
             }
         }
+
+        if (same)
+        {
+            break;
+        }
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < (k % period); i++)
     {
-        if ((k % path[i].size() == 0))
-        {
-            cout << path[i][path[i].size() - 1] << endl;
-        }
-        else
-        {
-            cout << path[i][k % path[i].size()] << endl;
-        }
+        reverse(mdf + a1, mdf + a2 + 1);
+        reverse(mdf + b1, mdf + b2 + 1);
     }
+
+    for (int i = 1; i < n + 1; i++)
+    {
+        cout << mdf[i] << endl;
+    }
+    
 }
