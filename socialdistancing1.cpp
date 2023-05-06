@@ -1,72 +1,69 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, strk1, strk2, oldcowd = INT_MAX, newcowd, cow[100005], tcowc;
+int n, inf[100005], infc, bm = -1, ibm = INT_MAX;
+//100005
 
 int main()
 {
     scanf("%d", &n);
-    int strk = 0;
     for (int i = 0; i < n; i++)
     {
         int t;
         scanf("%1d", &t);
-        cow[i] = t;
-        if (t == 0)
+        if (t == 1)
         {
-            strk++;
+            inf[infc] = i;
+            if (infc != 0)
+            {
+                ibm = min(ibm, inf[infc] - inf[infc - 1]);
+            }
+            infc++;
+        }
+    }
+    if (infc == 0)
+    {
+        cout << n - 1 << endl;
+        return 0;
+    }
+
+    int l = 1, r = n, pc, m;
+    bool p = false;
+
+    while (true)
+    {
+        pc = 0;
+        m = (l + r) / 2;
+        if (l > r)
+        {
+            break;
+        }
+
+        pc = pc + (inf[0] / m);
+
+        for (int i = 1; i < infc; i++)
+        {
+            if ((inf[i] - inf[i - 1]) / m > 0)
+            {
+                pc = pc + ((inf[i] - inf[i - 1]) / m) - 1;
+            }
+        }
+
+        if (inf[infc - 1] != (n - 1))
+        {
+            pc = pc + (((n - 1) - inf[infc - 1]) / m);
+        }
+
+        if (pc >= 2)
+        {
+            bm = max(bm, m);
+            l = m + 1;
         }
         else
         {
-            tcowc++;
-            if (strk > strk1)
-            {
-                strk2 = strk1;
-                strk1 = strk;
-            }
-            else if (strk > strk2)
-            {
-                strk2 = strk;
-            }
-            strk = 0;
+            r = m - 1;
         }
     }
-
-    if (strk2 % 2 == 0)
-    {
-        strk2 = strk2 - 1;
-    }
-
-    newcowd = ((strk2 - (strk2 % 2)) / 2) + 1;
-
-    strk = 0;
-    int cowc = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (cow[i] == 0)
-        {
-            strk++;
-        }
-        else
-        {
-            cowc++;
-            if (cowc == 1)
-            {
-                strk = 1;
-                continue;
-            }
-            else if (cowc == tcowc)
-            {
-                oldcowd = min(oldcowd, strk);
-                break;
-            }
-            else
-            {
-                oldcowd = min(oldcowd, strk);
-                strk = 1;
-            }
-        }
-    }
-
-    cout << min(newcowd, oldcowd) << endl;
+    
+    cout << min(bm, ibm) << endl;
 }
