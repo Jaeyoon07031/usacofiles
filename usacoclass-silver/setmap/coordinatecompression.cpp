@@ -2,8 +2,9 @@
 using namespace std;
 #define ll long long
 
-ll binaryHeap[100005];
+ll binaryHeap[1000005], originalInput[1000005], uniqueCount;
 ll nodeCount = -1, n;
+map<ll, ll> compressedCoords, duplicates;
 
 ll parentNode(ll i)
 {
@@ -46,7 +47,7 @@ ll extractMin()
     ll minValue = binaryHeap[0];
  
     binaryHeap[0] = binaryHeap[nodeCount];
-    nodeCount = nodeCount - 1;
+    nodeCount--;
 
     shiftDown(0);
     return minValue;
@@ -54,32 +55,37 @@ ll extractMin()
 
 void insertNode(ll value)
 {
-    nodeCount = nodeCount + 1;
+    nodeCount++;
     binaryHeap[nodeCount] = value;
     shiftUp(nodeCount);
 }
 
 int main()
 {
-    cin >> n;
+    scanf("%d\n", &n);
     for (ll i = 0; i < n; i++)
     {
         ll ipt;
         scanf("%lld", &ipt);
-        if (ipt == 0)
+        if (duplicates[ipt] == 0)
         {
-            if(nodeCount == -1)
-            {
-                cout << 0 << endl;
-            }
-            else
-            {
-                cout << extractMin() << endl;
-            }
-        } 
-        else
-        {
+            uniqueCount++;
             insertNode(ipt);
         }
+        duplicates[ipt] = duplicates[ipt] + 1;
+        originalInput[i] = ipt;
     }
+    for (ll i = 0; i < uniqueCount; i++)
+    {
+        ll val = extractMin();
+        if (compressedCoords.count(val) == 0)
+        {
+            compressedCoords[val] = i;
+        }
+    }
+    for (ll i = 0; i < n; i++)
+    {
+        cout << compressedCoords[originalInput[i]] << " ";
+    }
+    cout << endl;
 }
