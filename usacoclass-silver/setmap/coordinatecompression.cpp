@@ -1,17 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long
 
-ll binaryHeap[1000005], originalInput[1000005], uniqueCount;
-ll nodeCount = -1, n;
-map<ll, ll> compressedCoords, duplicates;
+int n, uniqueCount, originalInput[1000005];
+set<int> s;
+map<int, int> compressedCoords;
 
-ll parentNode(ll i)
+int main()
+{
+    scanf("%d\n", &n);
+    for (int i = 0; i < n; i++)
+    {
+        int ipt;
+        scanf("%d", &ipt);
+        s.insert(ipt);
+        originalInput[i] = ipt;
+    }
+    uniqueCount = s.size();
+    for (int i = 0; i < uniqueCount; i++)
+    {
+        int val = *s.begin();
+        s.erase(s.begin());
+        compressedCoords[val] = i;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cout << compressedCoords[originalInput[i]] << " ";
+    }
+    cout << endl;
+}
+
+/*
+int binaryHeap[1000005], originalInput[1000005], uniqueCount;
+int nodeCount = -1, n;
+map<int, int> compressedCoords, duplicates;
+
+int parentNode(int i)
 {
     return (i - 1) / 2;
 }
 
-void shiftUp(ll node)
+void shiftUp(int node)
 {
     while (node > 0 && binaryHeap[parentNode(node)] > binaryHeap[node])
     {
@@ -20,11 +48,11 @@ void shiftUp(ll node)
     }
 }
 
-void shiftDown(ll node)
+void shiftDown(int node)
 {
-    ll maxIndex = node;
-    ll l = ((2 * node) + 1);
-    ll r = ((2 * node) + 2);
+    int maxIndex = node;
+    int l = ((2 * node) + 1);
+    int r = ((2 * node) + 2);
  
     if (binaryHeap[l] < binaryHeap[maxIndex] && l <= nodeCount)
     {
@@ -42,9 +70,9 @@ void shiftDown(ll node)
     }
 }
 
-ll extractMin()
+int extractMin()
 {
-    ll minValue = binaryHeap[0];
+    int minValue = binaryHeap[0];
  
     binaryHeap[0] = binaryHeap[nodeCount];
     nodeCount--;
@@ -53,39 +81,10 @@ ll extractMin()
     return minValue;
 }
 
-void insertNode(ll value)
+void insertNode(int value)
 {
     nodeCount++;
     binaryHeap[nodeCount] = value;
     shiftUp(nodeCount);
 }
-
-int main()
-{
-    scanf("%d\n", &n);
-    for (ll i = 0; i < n; i++)
-    {
-        ll ipt;
-        scanf("%lld", &ipt);
-        if (duplicates[ipt] == 0)
-        {
-            uniqueCount++;
-            insertNode(ipt);
-        }
-        duplicates[ipt] = duplicates[ipt] + 1;
-        originalInput[i] = ipt;
-    }
-    for (ll i = 0; i < uniqueCount; i++)
-    {
-        ll val = extractMin();
-        if (compressedCoords.count(val) == 0)
-        {
-            compressedCoords[val] = i;
-        }
-    }
-    for (ll i = 0; i < n; i++)
-    {
-        cout << compressedCoords[originalInput[i]] << " ";
-    }
-    cout << endl;
-}
+*/

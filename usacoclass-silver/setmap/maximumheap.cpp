@@ -19,9 +19,11 @@ int main()
             }
             else
             {
-                int minv = *s.begin();
-                cout << minv << '\n';
-                s.erase(s.begin());
+                auto it = s.end();
+                it--;
+                int maxv = *it;
+                cout << maxv << '\n';
+                s.erase(it);
             }
         } 
         else
