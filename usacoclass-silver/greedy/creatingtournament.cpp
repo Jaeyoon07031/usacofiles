@@ -2,7 +2,7 @@
 using namespace std;
 
 int n, cost;
-vector<int> tournament;
+vector<int> game;
 
 int main()
 {
@@ -11,38 +11,22 @@ int main()
     {
         int tmp;
         scanf("%d", &tmp);
-        tournament.push_back(tmp);
+        game.push_back(tmp);
     }
 
-    while (tournament.size() != 1)
+    while (game.size() != 1)
     {
-        vector<int> newTournament;
-        int pointer = 0;
-        while (true)
+        int largestVal = -1, largestIndex;
+        for (int i = 0; i < game.size(); i++)
         {
-            if (pointer + 2 < tournament.size() && abs(tournament[pointer] - tournament[pointer + 1]) > abs(tournament[pointer + 1] - tournament[pointer + 2]))
+            if (game[i] > largestVal)
             {
-                newTournament.push_back(tournament[pointer]);
-                newTournament.push_back(min(tournament[pointer + 1], tournament[pointer + 2]));
-                cost = cost + abs(tournament[pointer + 1] - tournament[pointer + 2]);
-                pointer = pointer + 3;
-            }
-            else
-            {
-                newTournament.push_back(min(tournament[pointer], tournament[pointer + 1]));
-                cost = cost + abs(tournament[pointer] - tournament[pointer + 1]);
-                pointer = pointer + 2;
-            }
-            if (pointer >= tournament.size() - 1)
-            {
-                if (pointer == tournament.size() - 1)
-                {
-                    newTournament.push_back(tournament[pointer]);
-                }
-                tournament.swap(newTournament);
-                break;
+                largestVal = game[i];
+                largestIndex = i;
             }
         }
+
+        
     }
     
     cout << cost << endl;
