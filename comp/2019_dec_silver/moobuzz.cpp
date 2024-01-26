@@ -1,42 +1,58 @@
 #include <bits/stdc++.h>
+#define lld long long
 using namespace std;
 
-int n, h, t, center;
+lld n, h, t, center;
 
-bool check(int ce)
+int check(lld ce)
 {
-    if (n > ce - (ce / 3) - (ce / 5) + (ce / 15))
+	lld chk = ce - (ce / 3) - (ce / 5) + (ce / 15);
+
+    if (n < chk)
     {
         return true;
     }
-    return false;
+	else if (n > chk)
+	{
+		return false;
+	}
+	else
+	{
+		if ((ce % 3) == 0 || (ce % 5) == 0)
+		{
+			ce--;
+		}
+		if ((ce % 3) == 0 || (ce % 5) == 0)
+		{
+			ce--;
+		}
+		cout << ce << endl;
+		return 2;
+	}
 }
 
 int main()
 {
-    scanf("%d", &n);
+    scanf("%lld", &n);
     t = n;
     h = 2 * n;
 
     while (true)
 	{
 		center = (h + t) / 2;
-        bool res = check(center);
+        lld res = check(center);
 
-		if (h == t)
+		if(res == 1)
 		{
-			cout << center << endl;
-			break;
+			h = center;
 		}
-		else if (res)
+		else if (res == 0)
 		{
-			t = center + 1;
-			continue;
+			t = center;
 		}
 		else
 		{
-			h = center;
-			continue;
+			return 0;
 		}
 	}
 }
