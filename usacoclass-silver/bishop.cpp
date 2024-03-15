@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n;
+int n, best;
 set<pair<int, int>> valid;
 
-int find(int x, int y, int cnt)
+void find(int x, int y, int cnt)
 {
     if (x == n)
     {
@@ -13,7 +13,19 @@ int find(int x, int y, int cnt)
     }
     if (y == n)
     {
-        return cnt;
+        best = max(best, cnt);
+        return;
+    }
+
+    if (valid.empty())
+    {
+        best = max(best, cnt);
+        return;
+    }
+
+    if (valid.size() + cnt <= best)
+    {
+        return;
     }
 
     if (valid.count({x, y}) != 0)
@@ -22,55 +34,59 @@ int find(int x, int y, int cnt)
         int tx = x, ty = y;
         while (tx >= 0 && tx < n && ty >= 0 && ty < n)
         {
-            //figure why tf valid doesnt actually lose elements
-            cout << "size before: " << valid.size();
-            valid.erase({tx, ty});
-            cout << "size after" << valid.size();
-            removal.push_back({tx, ty});
+            if (valid.erase({tx, ty}) != 0)
+            {
+                removal.push_back({tx, ty});
+            }
             tx++;
             ty--;
         }
         tx = x, ty = y;
         while (tx >= 0 && tx < n && ty >= 0 && ty < n)
         {
-            valid.erase({tx, ty});
-            removal.push_back({tx, ty});
+            if (valid.erase({tx, ty}) != 0)
+            {
+                removal.push_back({tx, ty});
+            }
             tx++;
             ty++;
         }
         tx = x, ty = y;
         while (tx >= 0 && tx < n && ty >= 0 && ty < n)
         {
-            valid.erase({tx, ty});
-            removal.push_back({tx, ty});
+            if (valid.erase({tx, ty}) != 0)
+            {
+                removal.push_back({tx, ty});
+            }
             tx--;
             ty++;
         }
         tx = x, ty = y;
         while (tx >= 0 && tx < n && ty >= 0 && ty < n)
         {
-            valid.erase({tx, ty});
-            removal.push_back({tx, ty});
+            if (valid.erase({tx, ty}) != 0)
+            {
+                removal.push_back({tx, ty});
+            }
             tx--;
             ty--;
         }
 
-        cnt++;
-        cnt = max(cnt, find(x + 1, y, cnt));
+        find(x + 1, y, cnt + 1);
 
         for (auto obj : removal)
         {
             valid.insert(obj);
         }
 
-        cnt = max(cnt, find(x + 1, y, cnt));
+        find(x + 1, y, cnt);
 
-        return cnt;
+        return;
     }
     else
     {
-        cnt = max(cnt, find(x + 1, y, cnt));
-        return cnt;
+        find(x + 1, y, cnt);
+        return;
     }
 }
 
@@ -90,5 +106,7 @@ int main()
         }
     }
 
-    cout << find(0, 0, 0) << endl;
+    find(0, 0, 0);
+
+    cout << best << endl;
 }

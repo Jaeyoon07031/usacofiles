@@ -6,9 +6,6 @@ int berries[1005];
 
 int main()
 {
-    //freopen("berries.in","r",stdin);
-	//freopen("berries.out","w",stdout);
-
     scanf("%d%d", &trees, &baskets);
     for (int i = 0; i < trees; i++)
     {
@@ -17,39 +14,34 @@ int main()
 
     sort(berries, berries + trees, greater<int>());
 
-    for (int goal = berries[0]; goal > 0; goal--)
+    for (int goal = 1; goal <= berries[0]; goal++)
     {
+        int full = 0;
+        for (int i = 0; i < trees; i++)
+        {
+            full += berries[i] / goal;
+        }
+
+        if (full < baskets / 2) { break; }
+
+        if (full >= baskets)
+        {
+            best = max(best, goal * (baskets / 2));
+            continue;
+        }
+
         vector<int> newBaskets;
         for (int i = 0; i < trees; i++)
         {
             int index = newBaskets.size();
-            int begin = index;
 
-            if (berries[i] < goal)
+            for (int j = 0; j < berries[i] / goal; j++)
             {
-                newBaskets.push_back(berries[i]);
+                newBaskets.push_back(goal);
             }
-            else
+            for (int j = 0; j < berries[i] % goal; j++)
             {
-                for (int j = 0; j < (berries[i] / goal); j++)
-                {
-                    newBaskets.push_back(goal);
-                }
-                int end = newBaskets.size() - 1;
-                
-                int remainder = berries[i] % goal;
-                
-                while (remainder != 0)
-                {
-                    newBaskets[index]++;
-                    remainder--;
-
-                    index++;
-                    if (index > end)
-                    {
-                        index = begin;
-                    }
-                }
+                newBaskets[index + j]++;
             }
         }
 
@@ -61,7 +53,7 @@ int main()
             total = total + newBaskets[i];
         }
 
-        best = max(best, total);
+        best = max (best, total);
     }
 
     cout << best;
